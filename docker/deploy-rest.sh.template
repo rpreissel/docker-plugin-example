@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# http://${restHost}:${restAppPort}
+
+export DOCKER_HOST=${restHost}
+
+echo "stop and remove container: ${restContainerName}"
+docker stop ${restContainerName} >/dev/null|| true && docker rm -v ${restContainerName} >/dev/null || true
+
+echo "start container: ${restContainerName} mit image: ${imageName}"
+docker run -d --name ${restContainerName} -e "SPRING_PROFILES_ACTIVE=test" ${restPortMappings} --restart=always -v "/var/log/hw:/logs" ${registryUrl}/${imageName}

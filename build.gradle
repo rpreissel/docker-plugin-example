@@ -1,0 +1,31 @@
+apply plugin: 'de.e2.docker'
+
+docker {
+//    buildDir=file('build/docker2')
+    extras = [
+            restContainerName: "${appName}-rest",
+            restAppPort: "10008",
+            restHost: "restHost",
+            restPortMappings: "-p ${-> extras.restAppPort}:${appPort} -p ${-> extras.restAppPort.toInteger() + 1000}:${yourkitPort}"]
+}
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'de.e2.docker:docker-plugin:3.0.0'
+    }
+}
+
+dependencies {
+    docker files('docker')
+    docker 'de.e2.docker:docker-templates:3.0.0'
+}

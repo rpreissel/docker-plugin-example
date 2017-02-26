@@ -2,11 +2,12 @@ apply plugin: 'de.e2.docker'
 
 docker {
 //    buildDir=file('build/docker2')
-    extras = [
-            restContainerName: "${appName}-rest",
-            restAppPort: "10008",
-            restHost: "restHost",
-            restPortMappings: "-p ${-> extras.restAppPort}:${appPort} -p ${-> extras.restAppPort.toInteger() + 1000}:${yourkitPort}"]
+    ext {
+        restContainerName =  "${appName}-rest"
+        restAppPort =  "10008"
+        restHost = "restHost"
+        restPortMappings = "-p ${restAppPort}:${appPort} -p ${restAppPort.toInteger() + 1000}:${yourkitPort}"
+    }
 }
 
 
@@ -18,10 +19,12 @@ repositories {
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
     }
 
     dependencies {
         classpath 'de.e2.docker:docker-plugin:3.0.0'
+//        classpath ("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
     }
 }
 
@@ -29,3 +32,6 @@ dependencies {
     docker files('docker')
     docker 'de.e2.docker:docker-templates:3.0.0'
 }
+
+//apply plugin: 'de.e2.project'
+
